@@ -1,10 +1,10 @@
-const tarjets = document.getElementById("past-cards");
+const tarjets = document.getElementById("upcoming-cards");
 let card = data.events;
 let boxCards = "";
 let currentDate = data.currentDate;
 
 for (let cards of card){
-    if ( `${cards.date}` < currentDate ){
+    if ( `${cards.date}` > currentDate ){
         boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
         <img
           src= ${cards.image}
