@@ -3,9 +3,9 @@ let card = data.events;
 let boxCards = "";
 let currentDate = data.currentDate;
 
-for (let cards of card){
-    if ( `${cards.date}` < currentDate ){
-        boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
+for (let cards of card) {
+  if (cards.date < currentDate) {
+    boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
         <img
           src= ${cards.image}
           class="card-img-top"
@@ -18,12 +18,13 @@ for (let cards of card){
                 <p class="card-text text-white fs-5">
                   ${cards.description}
                 </p>
+                <p class="card-text text-white fs-5"> Price: $${cards.price} </p>
                 <a href="../assets/details.html" class="btn bg-dark-subtle d-flex justify-content-end " style="width: 4.5rem;"
                   >Details</a
                 >
               </div>
-        </div>`
-    }
- }
+        </div>`;
+  }
+}
 
- tarjets.innerHTML = boxCards;
+tarjets.innerHTML = boxCards;
