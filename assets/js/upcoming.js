@@ -14,7 +14,7 @@ for (let card of cards) {
         />
         <div class="card-body d-flex flex-column justify-content-around">
                 <h5 class="card-title text-white fs-4">${card.name}</h5>
-                <p class="card-text text-white fs-5"> ${cards.date} </p>
+                <p class="card-text text-white fs-5"> ${card.date} </p>
                 <p class="card-text text-white fs-5"> Price: $${card.price} </p>
                 <p class="card-text text-white fs-5">
                   ${card.description}
