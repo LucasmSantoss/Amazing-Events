@@ -59,9 +59,7 @@ function createCheckbox(lista, elemento) {
 }
 
 function categoryFilter(event) {
-  let inputFilter = [
-    ...document.querySelectorAll('input[type="checkbox"]:checked')
-  ].map((element) => element.value);
+  let inputFilter = [...document.querySelectorAll('input[type="checkbox"]:checked')].map((element) => element.value);
   if (inputFilter.length === 0) {
     return event;
   }
@@ -69,9 +67,7 @@ function categoryFilter(event) {
 }
 
 function filterSearch(search, e) {
-  let arrayFilter = e.filter((searchFilter) =>
-    searchFilter.name.toLowerCase().includes(search)
-  );
+  let arrayFilter = e.filter((searchFilter) => searchFilter.name.toLowerCase().includes(search));
   return arrayFilter;
 }
 
@@ -85,7 +81,6 @@ categoryCheckBox.addEventListener("change", () => {
 });
 
 inputSearch.addEventListener("keyup", (e) => {
-  
   let search = inputSearch[0].value.toLowerCase();
   let searchFunction = filterSearch(search, cardsData);
   let filters = categoryFilter(searchFunction);
