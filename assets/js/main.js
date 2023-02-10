@@ -1,10 +1,23 @@
 const tarjets = document.getElementById("cards");
-let cards = data.events;
+const cardsData = data.events;
+const filterCheckbox = Array.from(new Set(cardsData.map(card => card.category)));
+const categoryCheckBox = document.getElementById("checkbox");
 
-function allCards(e) {
-  let boxCards = "";
-  for (let card of e) {
-    boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
+const inputSearch = document.getElementById("search");
+
+allCards(cardsData);
+createCheckbox(filterCheckbox, categoryCheckBox);
+
+////// Functions ///////////////
+
+function allCards(events) {
+  if (events.length === 0) {
+    tarjets.innerHTML = `<div class="error m-auto"> <p class="text-center fs-3"> No events found</p> 
+    <img src="./assets/imgs/error.png" alt="error"> </div>;`;
+  } else {
+    let boxCards = "";
+    for (let card of events) {
+      boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
   <img
     src= ${card.image}
     class="card-img-top"
@@ -23,77 +36,62 @@ function allCards(e) {
           >
         </div>
   </div>`;
+    }
+    tarjets.innerHTML = boxCards;
   }
-  tarjets.innerHTML = boxCards;
 }
 
-allCards(cards);
-
-////// Search ///////////////
-
-const inputSearch = document.querySelector(".form-control");
-
-inputSearch.addEventListener("keyup", (e) => {
-  const search = e.target.value.toLowerCase();
-
-  const eventSearch = category(cards);
-
-  const events = eventSearch.filter((event) =>
-    event.name.toLowerCase().includes(search)
-  );
-
-  allCards(events);
-
-  let contain = Boolean(...events);
-  if (!contain) {
-    tarjets.innerHTML = `<div class="error m-auto"> <p class="text-center fs-3"> No events found</p> 
-    <img src="./assets/imgs/error.png" alt="error"> </div>;`;
-  } else {
-    allCards(events);
-  }
-});
-
-////// Checkbox ///////////////
-
-const categoryCheckBox = document.getElementById("checkbox");
-
-const checkBox = cards.map((card) => card.category);
-
-const checkBoxCategory = new Set(checkBox);
-
-const checkBoxArray = [...checkBoxCategory];
-
-let checkBoxDiv = "";
-
-for (let check of checkBoxArray) {
-  checkBoxDiv += `<div class="input-group-text m-2" style="border-style: none;" >
-  <label class="text-black fs-5 m-2 p-1">
-    <input
-      class="form-check-input"
-      type="checkbox"
-      aria-label="Checkbox for following text input"
-      value="${check}"
-    />
-    ${check}
-  </label> </div>`;
+function createCheckbox(lista, elemento) {
+  let checkBoxDiv = "";
+  lista.forEach((check) => {
+    checkBoxDiv += `<div class="input-group-text m-2" style="border-style: none;" >
+    <label class="text-black fs-5 m-2 p-1">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        aria-label="Checkbox for following text input"
+        value="${check}"
+      />
+      ${check}
+    </label> </div>`;
+  });
+  elemento.innerHTML = checkBoxDiv;
 }
 
-categoryCheckBox.innerHTML = checkBoxDiv;
-
-categoryCheckBox.addEventListener("change", () => {
-  let filterCheckbox = category(cards);
- 
-  allCards(filterCheckbox);
-});
-
-function category(e) {
+function categoryFilter(event) {
   let inputFilter = [
-    ...document.querySelectorAll('input[type="checkbox"]:checked'),
+    ...document.querySelectorAll('input[type="checkbox"]:checked')
   ].map((element) => element.value);
   if (inputFilter.length === 0) {
-    return e;
+    return event;
   }
-  return e.filter((filtrado) => inputFilter.includes(filtrado.category));
+  return event.filter((filters) => inputFilter.includes(filters.category));
 }
 
+function filterSearch(search, e) {
+  let arrayFilter = e.filter((searchFilter) =>
+    searchFilter.name.toLowerCase().includes(search)
+  );
+  return arrayFilter;
+}
 
+////// Events ///////////////
+
+categoryCheckBox.addEventListener("change", () => {
+  let search = inputSearch[0].value.toLowerCase();
+  let searchFunction = filterSearch(search, cardsData);
+  let filters = categoryFilter(searchFunction);
+  allCards(filters);
+});
+
+inputSearch.addEventListener("keyup", (e) => {
+  
+  let search = inputSearch[0].value.toLowerCase();
+  let searchFunction = filterSearch(search, cardsData);
+  let filters = categoryFilter(searchFunction);
+  allCards(filters);
+});
+
+inputSearch.addEventListener("submit" , (e) => {
+  e.preventDefault();
+})
