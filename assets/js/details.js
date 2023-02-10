@@ -5,11 +5,10 @@ const params = new URLSearchParams( location.search );
 const id = params.get( "id" ); 
 const details = data.events.find( (card) =>  card._id == id);
 const nombre = params.get( "name" ); 
-const aux = details.name;
-document.title = `${aux}'s Details`; 
+
 
 function estimateAsistence(contain) {
-  let shows = '';
+  let shows = "";
   if (contain.assistance) {
     shows = contain.assistance;
   } else if (contain.estimate) {
