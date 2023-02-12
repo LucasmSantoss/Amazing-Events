@@ -1,29 +1,45 @@
-import { allCards, createCheckbox, categoryFilter, filterSearch } from "../module/functions.js"
+import { addCheckbox , allCards, createCheckbox, categoryFilter, filterSearch, addCard } from "../module/functions.js"
+
 
 const tarjets = document.getElementById("cards");
-const cardsData = data.events;
-const filterCheckbox = Array.from(new Set(cardsData.map(card => card.category)));
-const categoryCheckBox = document.getElementById("checkbox");
 
+const filterCheckbox = Array.from(new Set( data.events.map(card => card.category)));
+const categoryCheckBox = document.getElementById("checkbox");
 const inputSearch = document.getElementById("search");
 
-allCards(cardsData);
-createCheckbox(filterCheckbox, categoryCheckBox);
 
-////// Events ///////////////
+addCheckbox(filterCheckbox,categoryCheckBox);
+
+///////////// Fetch ///////////////
+
+
+
+
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+      addCard(data.events,tarjets )
+      }
+      );
+      
+
+
+
+////////// Events ///////////////
 
 categoryCheckBox.addEventListener("change", () => {
   let search = inputSearch[0].value.toLowerCase();
-  let searchFunction = filterSearch(search, cardsData);
-  let filters = categoryFilter(searchFunction);
-  allCards(filters);
+  let searchFilter = filterSearch(search, data.events);
+  let filters = categoryFilter(searchFilter);
+  addCard(filters,tarjets);
 });
 
 inputSearch.addEventListener("keyup", (e) => {
   let search = inputSearch[0].value.toLowerCase();
-  let searchFunction = filterSearch(search, cardsData);
-  let filters = categoryFilter(searchFunction);
-  allCards(filters);
+  let searchFilter = filterSearch(search, data.events);
+  let filters = categoryFilter(searchFilter);
+  addCard(filters,tarjets);
 });
 
 inputSearch.addEventListener("submit" , (e) => {

@@ -1,38 +1,98 @@
 export function allCards(events) {
-    if (events.length === 0) {
-      tarjets.innerHTML = `<div class="error m-auto"> <p class="text-center fs-3"> No events found</p> 
-      <img src="./assets/imgs/error.png" alt="error"> </div>;`;
-    } else {
-      let boxCards = "";
-      for (let card of events) {
-        boxCards += `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
+     return `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
     <img
-      src= ${card.image}
+      src= ${events.image}
       class="card-img-top"
       style="height: 10rem"
       alt="cine"
     />
     <div class="card-body d-flex flex-column justify-content-around">
-            <h5 class="card-title text-white fs-4">${card.name}</h5>
-            <p class="card-text text-white fs-5"> ${card.date} </p>
+            <h5 class="card-title text-white fs-4">${events.name}</h5>
+            <p class="card-text text-white fs-5"> ${events.date} </p>
             <p class="card-text text-white fs-5">
-              ${card.description}
+              ${events.description}
             </p>
-            <p class="card-text text-white fs-5"> Price: $${card.price} </p>
-            <a href="../assets/details.html?id=${card._id}&name=${card.name}" class="btn bg-dark-subtle d-flex justify-content-end " style="width: 4.5rem;"
+            <p class="card-text text-white fs-5"> Price: $${events.price} </p>
+            <a href="../assets/details.html?id=${events._id}&name=${events.name}" class="btn bg-dark-subtle d-flex justify-content-end " style="width: 4.5rem;"
               >Details</a
             >
           </div>
     </div>`;
-      }
-      tarjets.innerHTML = boxCards;
+      
     }
+  
+  export function addCard(events, cards){
+   let boxCards = "";
+  for(let event of events){
+    boxCards += allCards(event);
+  }
+  cards.innerHTML = boxCards;
+  }
+
+  export function addCardUpcomingDate(events, cards){
+      let currentEvents = "";
+      for(let event of events){
+        if (event.date > data.currentDate ){
+          currentEvents += allCards(event)
+        } 
+        cards.innerHTML = currentEvents;
+      }
   }
   
-  export function createCheckbox(lista, elemento) {
+  export function addCardPastDate(events, cards){
+  
+    let currentEvents = "";
+    for(let event of events){
+      if (event.date < data.currentDate ){
+        currentEvents += allCards(event)
+      } 
+      
+      cards.innerHTML = currentEvents;
+    }
+}
+
+export function addDetailsCard(events, cards){
+  let boxCards = "";
+  for(let event of events){
+    boxCards += detailsCard(event);
+  }
+  cards.innerHTML = boxCards;
+  }
+
+export function detailsCard (event){
+  return `<div class="row g-1 p">
+<div class="col-md-4 d-flex justify-content-center align-items-center p-4">
+  <img src="${event.image}" style="min-width: 20rem; max-width: 50rem; " class="img-fluid rounded-start " alt="Museum">
+</div>
+<div class="col-md-8 p-3">
+  <div class="card-body">
+    <h5 class="card-title text-white fs-3"> ${event.name}</h5>
+    <p class="card-text text-white text-white fs-5"><small class="text-black"> ${event.date}</small> 2021-11-02 </p>
+    <p class="card-text text-white fs-5"> ${event.description}</p>
+    <p class="card-text text-white fs-5"><small class="text-black">Place</small> ${event.place}</p>
+    <p class="card-text text-white fs-5"><small class="text-black">Capacity</small> ${event.capacity}</p>
+    <p class="card-text text-white fs-5"><small class="text-black">Assistance | Estimate</small> </p>
+    <p class="card-text text-white fs-5"><small class="text-black">Price</small> ${event.price}</p>
+  </div> </div>`
+}
+
+
+  export function errorMessage () {
+    return `<div class="error m-auto"> <p class="text-center fs-3"> No events found</p> 
+    <img src="./imgs/error.png" alt="error"> </div>;`;
+  }
+
+  export function addCheckbox (category, checks){
     let checkBoxDiv = "";
-    lista.forEach((check) => {
-      checkBoxDiv += `<div class="input-group-text m-2" style="border-style: none;" >
+    for(let categories of category ) {
+      checkBoxDiv += createCheckbox(categories)
+    }
+    checks.innerHTML = checkBoxDiv;
+  }
+  
+  
+  export function createCheckbox(check) {
+    return `<div class="input-group-text m-2" style="border-style: none;" >
       <label class="text-black fs-5 m-2 p-1">
         <input
           class="form-check-input"
@@ -42,9 +102,8 @@ export function allCards(events) {
         />
         ${check}
       </label> </div>`;
-    });
-    elemento.innerHTML = checkBoxDiv;
-  }
+    }
+  
   
   export function categoryFilter(event) {
     let inputFilter = [...document.querySelectorAll('input[type="checkbox"]:checked')].map((element) => element.value);
