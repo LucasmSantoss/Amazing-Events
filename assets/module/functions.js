@@ -1,4 +1,5 @@
 export function allCards(events) {
+    
      return `<div class="card p-3 m-1 bg-dark" style="width: 18rem">
     <img
       src= ${events.image}
@@ -21,7 +22,7 @@ export function allCards(events) {
       
     }
   
-  export function addCard(events, cards){
+  export function addCard(events, cards ){
    let boxCards = "";
   for(let event of events){
     boxCards += allCards(event);
@@ -29,34 +30,24 @@ export function allCards(events) {
   cards.innerHTML = boxCards;
   }
 
-  export function addCardUpcomingDate(events, cards){
+  export function addCardUpcomingDate(events, currentDate, isUpcoming  , cards){
       let currentEvents = "";
+      
       for(let event of events){
-        if (event.date > data.currentDate ){
+        if (event.date > currentDate && isUpcoming){
           currentEvents += allCards(event)
-        } 
+        } else if (event.date < currentDate && !isUpcoming){
+          currentEvents += allCards(event)
+        }
         cards.innerHTML = currentEvents;
       }
   }
   
-  export function addCardPastDate(events, cards){
-  
-    let currentEvents = "";
-    for(let event of events){
-      if (event.date < data.currentDate ){
-        currentEvents += allCards(event)
-      } 
-      
-      cards.innerHTML = currentEvents;
-    }
-}
+ 
 
 export function addDetailsCard(events, cards){
-  let boxCards = "";
-  for(let event of events){
-    boxCards += detailsCard(event);
-  }
-  cards.innerHTML = boxCards;
+  
+  cards.innerHTML = detailsCard(events);
   }
 
 export function detailsCard (event){
@@ -117,3 +108,116 @@ export function detailsCard (event){
     let arrayFilter = e.filter((searchFilter) => searchFilter.name.toLowerCase().includes(search));
     return arrayFilter;
   }
+
+  ///// STATS ////////////
+
+
+  export function table (events) {
+    return  `<div
+        class="d-flex justify-content-center m-auto"
+        style="width: 70%;"
+       >
+        <table class="table table-bordered border-primary m-3 bg-white" >
+           <thead>
+            <tr>
+              <th colspan="12" class="fs-4">Events statistics</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="fs-5" >
+                ${events.name}
+              </td>
+              <td class="fs-5">
+                Events with the lowest percentage of attendance
+              </td>
+              <td class="fs-5">Event with larger capacity</td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <thead>
+              <tr>
+                <th colspan="12" class="fs-4">
+                  Upcoming Events stadistics by Category
+                </th>
+              </tr>
+            </thead>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td class="fs-5">Categories</td>
+              <td class="fs-5">Renevues</td>
+              <td class="fs-5">Percentage of attendance</td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <thead>
+              <tr>
+                <th colspan="12" class="fs-4">
+                  Past Events statistics by Category
+                </th>
+              </tr>
+            </thead>
+          </tbody>
+
+          <tbody>
+            <tr>
+              <td class="fs-5">Category</td>
+              <td class="fs-5">Renevues</td>
+              <td class="fs-5">Percentage of attendance</td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+            <tr>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+              <td class="p-3"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+  ` }
+
+  export function addTable(events, cards ){
+    let boxCards = "";
+    
+    boxCards += table(events);
+   cards.innerHTML = boxCards;
+ }
+
+

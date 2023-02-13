@@ -1,32 +1,33 @@
-import { addCheckbox , allCards, createCheckbox, categoryFilter, filterSearch, addCard } from "../module/functions.js"
+import { addCheckbox , categoryFilter, filterSearch, addCard } from "../module/functions.js"
 
 
 const tarjets = document.getElementById("cards");
 
-const filterCheckbox = Array.from(new Set( data.events.map(card => card.category)));
+
 const categoryCheckBox = document.getElementById("checkbox");
 const inputSearch = document.getElementById("search");
 
 
+
+
+/////////// Fetch ///////////////
+const data = await fetch("https://mindhub-xj03.onrender.com/api/amazing")
+    .then(res => res.json())
+    .catch(err => console.log(err));
+
+
+addCard(data.events,tarjets )
+
+
+const filterCheckbox = Array.from(new Set( data.events.map(card => card.category)));
 addCheckbox(filterCheckbox,categoryCheckBox);
 
-///////////// Fetch ///////////////
 
 
 
 
-fetch("https://mindhub-xj03.onrender.com/api/amazing")
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      addCard(data.events,tarjets )
-      }
-      );
-      
 
-
-
-////////// Events ///////////////
+//////// Events ///////////////
 
 categoryCheckBox.addEventListener("change", () => {
   let search = inputSearch[0].value.toLowerCase();
