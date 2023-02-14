@@ -62,9 +62,21 @@ export function detailsCard (event){
     <p class="card-text text-white fs-5"> ${event.description}</p>
     <p class="card-text text-white fs-5"><small class="text-black">Place</small> ${event.place}</p>
     <p class="card-text text-white fs-5"><small class="text-black">Capacity</small> ${event.capacity}</p>
-    <p class="card-text text-white fs-5"><small class="text-black">Assistance | Estimate</small> </p>
+    <p class="card-text text-white fs-5"><small class="text-black"></small>${estimateAsistence(event)} </p>
     <p class="card-text text-white fs-5"><small class="text-black">Price</small> ${event.price}</p>
   </div> </div>`
+}
+
+function estimateAsistence(contain) {
+  let shows = "";
+  let assistance = "Assistance";
+  let estimate = "Estimate";
+  if (contain.assistance) {
+    shows = assistance + " " + contain.assistance;
+  } else if (contain.estimate) {
+    shows = estimate + " " + contain.estimate;
+  }
+  return shows;
 }
 
 
@@ -95,6 +107,9 @@ export function detailsCard (event){
       </label> </div>`;
     }
   
+  export function printError (card, error){
+    errorMessage(error)
+  }
   
   export function categoryFilter(event) {
     let inputFilter = [...document.querySelectorAll('input[type="checkbox"]:checked')].map((element) => element.value);
@@ -126,7 +141,7 @@ export function detailsCard (event){
           <tbody>
             <tr>
               <td class="fs-5" >
-                ${events.name}
+                Events with the highest % of attendance
               </td>
               <td class="fs-5">
                 Events with the lowest percentage of attendance
@@ -134,14 +149,9 @@ export function detailsCard (event){
               <td class="fs-5">Event with larger capacity</td>
             </tr>
             <tr>
-              <td class="p-3"></td>
-              <td class="p-3"></td>
-              <td class="p-3"></td>
-            </tr>
-            <tr>
-              <td class="p-3"></td>
-              <td class="p-3"></td>
-              <td class="p-3"></td>
+              <td >${getHighestAttendancePercentage(events)}</td>
+              <td >${getLowestAttendancePercentage(events)} </td>
+              <td >${getEventWithLargestCapacity(events)}</td>
             </tr>
             <thead>
               <tr>
@@ -215,9 +225,66 @@ export function detailsCard (event){
 
   export function addTable(events, cards ){
     let boxCards = "";
-    
+
     boxCards += table(events);
    cards.innerHTML = boxCards;
  }
 
+ export async function dataApi() {
+  try {
+    const response = await fetch("https://mindhub-xj03.onrender.com/api/amazing");
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+ export function getEventWithLargestCapacity(events)  {
+    let largestCapacityEvent = 0;
+    let largestEvent;
+    for (const event of events) {
+      if (event.capacity > largestCapacityEvent) {
+        largestEvent = event;
+        largestCapacityEvent =  event.capacity;
+
+      }
+
+    }
+    return  `${largestEvent.name} ${largestCapacityEvent}` ;
+}
+
+
+export function getHighestAttendancePercentage(events) {
+    // Obtener el evento con el porcentaje de asistencia más alto
+    let maxAttendance = 0;
+    let name = "";
+    events.forEach(event => {
+      const attendancePercentage = (event.assistance / event.capacity) * 100;
+      if (attendancePercentage > maxAttendance) {
+        maxAttendance = attendancePercentage
+        name = event.name;
+      }
+    });
+  
+    return `${name} ${ maxAttendance}`;
+  
+}
+
+export function getLowestAttendancePercentage(events) {
+  // Obtener el evento con el porcentaje de asistencia más alto
+  let maxAttendance = 100;
+  let name = "";
+  events.forEach(event => {
+    const attendancePercentage = (event.assistance / event.capacity) * 100;
+    if (attendancePercentage < maxAttendance) {
+      maxAttendance = attendancePercentage
+      name = event.name;
+    }
+  });
+
+  return `${name} ${ maxAttendance}`;
+
+}
 
