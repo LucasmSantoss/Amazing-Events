@@ -114,7 +114,7 @@ export function createCheckbox(check) {
 export function cardsFilterPast(events, pastDate) {
   let pastEvents = [];
   for (let event of events) {
-    if (pastDate < event.date) {
+    if (pastDate > event.date) {
       pastEvents.push(event);
     }
   }
@@ -124,7 +124,7 @@ export function cardsFilterPast(events, pastDate) {
 export function cardFilterUpcoming(events, upComingDate) {
   let upComingEvents = [];
   for (let event of events) {
-    if (upComingDate > event.date) {
+    if (upComingDate <event.date) {
       upComingEvents.push(event);
     }
   }
@@ -152,25 +152,7 @@ export function filterSearch(search, e) {
 
 
 
-export function filterUpcoming(events, date) {
-  let upcomingFilter = []
-  for (let event of events) {
-      if (date < event.date) {
-          upcomingFilter.push(event)
-      }
-  }
-  return upcomingFilter
-}
 
-export function filterPast(events, date) {
-  let pastEvents = []
-  for (let event of events) {
-      if (date > event.date) {
-          pastEvents.push(event)
-      }
-  }
-  return pastEvents
-}
 
 export function maxAttendance(events) {
   let highest = 0
