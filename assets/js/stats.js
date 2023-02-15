@@ -1,14 +1,51 @@
-import {dataApi, addTable, getEventWithLargestCapacity,getHighestAttendancePercentage, getLowestAttendancePercentage} from "../module/functions.js"
+import { filterUpcoming, filterPast, maxAttendance, lowAttendance, maxCapacity, upcomingEventsStatistics, pastEventsStatistics } from "../module/functions.js";
 
-const $table = document.getElementById("table")
+const table = document.getElementById("table");
 
-const data = dataApi();
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+  .then((res) => res.json())
+  .then((data) => {
+        const upcomingEvents = filterUpcoming(data.events, data.currentDate);
+        const pastEvents = filterPast(data.events, data.currentDate);
+        const maxPercentage = maxAttendance(pastEvents);
+        const lowPercentage = lowAttendance(pastEvents);
+        const maxCap = maxCapacity(data.events);
+        const upcomingStatistics = upcomingEventsStatistics(upcomingEvents);
+        const pastStatistics = pastEventsStatistics(pastEvents);
 
-data.then((response) => {
-    addTable(response.events, $table )
-    getEventWithLargestCapacity(response.events)
-    getHighestAttendancePercentage(response.events)
-    getLowestAttendancePercentage(response.events)
-}).catch((error) => {
-    console.log(error)
-})
+        const eventStatisticsContainer = document.getElementById("event-statistics")
+        eventStatisticsContainer.innerHTML += 
+      `<tr>
+        <td>"${maxPercentage.name}" with ${((maxPercentage.assistance * 100) / maxPercentage.capacity).toFixed(2)}%</td>
+        <td>"${lowPercentage.name}" with ${((lowPercentage.assistance * 100) / lowPercentage.capacity).toFixed(2)}%</td>
+        <td>"${maxCap.name}" with ${maxCap.capacity} capacity </td>
+      </tr>`
+    ;
+
+       
+        const upcomingStatisticsContainer = document.getElementById("upcoming-statistics")
+        const upcomingRows = upcomingStatistics[0].map((category, i) => 
+      `<tr>
+        <td>${category}</td>
+        <td>$${upcomingStatistics[1][i]}</td>
+        <td>${upcomingStatistics[2][i].toFixed(2)}%</td>
+      </tr>`
+    ).join("");
+        upcomingStatisticsContainer.innerHTML = upcomingRows;
+        console.log(upcomingRows)
+
+        const pastStatisticsContainer = document.getElementById("past-statistics")
+        const pastRows = pastStatistics[0].map((category, i) => 
+      `<tr>
+        <td>${category}</td>
+        <td>$${pastStatistics[1][i]}</td>
+        <td>${pastStatistics[2][i].toFixed(2)}%</td>
+      </tr>`
+    ).join("");
+        pastStatisticsContainer.innerHTML = pastRows;
+    }).catch((err) => {
+        console.log(err) 
+        table.innerHTML = `<p class="text-center"> Error </p>`
+    } 
+    )
+        

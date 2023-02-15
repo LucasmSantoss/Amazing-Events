@@ -1,8 +1,11 @@
-import { addCheckbox , categoryFilter, filterSearch , addCardUpcomingDate} from "../module/functions.js"
-
-
-//////////////////////// NO ANDA EL FILTRO 
-/////////////////////////////// CRUZADO , ARREGLAR!!//////
+import {
+  addCheckbox,
+  categoryFilter,
+  filterSearch,
+  printError,
+  addCard,
+  cardsFilterPast,
+} from "../module/functions.js";
 
 const tarjets = document.getElementById("past-cards");
 
@@ -12,35 +15,44 @@ const inputSearch = document.getElementById("search");
 
 ///////////// Fetch ///////////////
 
-const data = await fetch("https://mindhub-xj03.onrender.com/api/amazing")
-    .then(res => res.json())
-    .catch(err => console.log(err));
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+  .then((res) => res.json())
+  .then((data) => {
+    const currentDate = data.currentDate;
+    const dataEvents = data.events;
+    addCard(cardsFilterPast(dataEvents, currentDate), tarjets);
+    const filterCheckbox = Array.from(
+      new Set(
+        dataEvents
+          .filter((event) => event.date <= currentDate)
+          .map((card) => card.category)
+      )
+    );
+    addCheckbox(filterCheckbox, categoryCheckBox);
 
-const currentDate = data.currentDate;
+    categoryCheckBox.addEventListener("change", () => {
+      let search = inputSearch[0].value.toLowerCase();
+      let searchFilter = filterSearch(
+        search,
+        cardsFilterPast(dataEvents, currentDate)
+      );
+      let filters = categoryFilter(searchFilter);
+      cardsFilterPast(filters, tarjets);
+      printError(filters, tarjets);
+    });
 
+    inputSearch.addEventListener("keyup", () => {
+      let search = inputSearch[0].value.toLowerCase();
+      let searchFilter = filterSearch(
+        search,
+        cardsFilterPast(dataEvents, currentDate)
+      );
+      let filters = categoryFilter(searchFilter);
+      cardsFilterPast(filters, tarjets);
+      printError(filters, tarjets);
+    });
 
-addCardUpcomingDate(data.events , currentDate , false, tarjets)
-
-const filterCheckbox = Array.from(new Set(data.events.map(card => card.category)));
-
-addCheckbox(filterCheckbox,categoryCheckBox);
-
-////// Events ///////////////
-
-categoryCheckBox.addEventListener("change", () => {
-  let search = inputSearch[0].value.toLowerCase();
-  let searchFilter = filterSearch(search, data.events);
-  let filters = categoryFilter(searchFilter);
-  addCardUpcomingDate(filters , currentDate , false, tarjets);
-});
-
-inputSearch.addEventListener("keyup", (e) => {
-  let search = inputSearch[0].value.toLowerCase();
-  let searchFilter = filterSearch(search, data.events);
-  let filters = categoryFilter(searchFilter);
-  addCardUpcomingDate(filters , currentDate , false, tarjets);
-});
-
-inputSearch.addEventListener("submit" , (e) => {
-  e.preventDefault();
-})
+    inputSearch.addEventListener("submit", (e) => {
+      e.preventDefault();
+    });
+  });

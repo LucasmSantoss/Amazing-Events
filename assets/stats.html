@@ -90,10 +90,55 @@
       </div>
     </header>
     <main class="bg-dark-subtle height: 75vh" style="padding-bottom: 100px">
+      <div class=" tabled-flex justify-content-center m-auto pt-2"
+      style="width: 70%;"">
+        <table class="table table-bordered border-primary m-3  bg-white text-center">
+            <thead>
+                <tr class="title fs-4">
+                    <th colspan="3">Event statistics</th>
+                </tr>
+                <tr>
+                    <th>Events with the highest percentage of attendance</th>
+                    <th>Events with the lowest percentage of attendance</th>
+                    <th>Event with larger capacity</th>
+                </tr>
+            </thead>
+            <tbody id="event-statistics">
 
-      <div id="table"> 
-      </div>
-    </main>
+            </tbody>
+        </table>
+        <table class="table table-bordered border-primary m-3 bg-white text-center">
+            <thead>
+                <tr class="title fs-4">
+                    <th colspan="3">Upcoming events statistics by category</th>
+                </tr>
+                <tr>
+                    <th class="fs-5">Category</th>
+                    <th class="fs-5">Revenues</th>
+                    <th class="fs-5">Percentage of attendance</th>
+                </tr>
+            </thead>
+            <tbody id="upcoming-statistics">
+
+            </tbody>
+        </table>
+        <table class="table table-bordered border-primary m-3 bg-white text-center">
+            <thead>
+                <tr class="title fs-4">
+                    <th colspan="3">Past events statistic by category</th>
+                </tr>
+                <tr>
+                    <th class="fs-5">Category</th>
+                    <th class="fs-5">Revenues</th>
+                    <th class="fs-5">Percentage of attendance</th>
+                </tr>
+            </thead>
+            <tbody id="past-statistics">
+
+            </tbody>
+        </table>
+    </div>
+  </main>
     <footer
       class="d-flex justify-content-between align-items-center p-3 bg-dark" style="min-height: 17vh; padding-top: 200px;"
     >

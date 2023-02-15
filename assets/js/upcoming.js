@@ -1,4 +1,4 @@
-import { addCheckbox , categoryFilter, filterSearch , addCardUpcomingDate} from "../module/functions.js"
+import { addCheckbox , categoryFilter, filterSearch , cardFilterUpcoming, printError, addCard } from "../module/functions.js"
 
 
 const tarjets = document.getElementById("upcoming-cards");
@@ -9,37 +9,41 @@ const inputSearch = document.getElementById("search");
 
 
 
-///////////// Fetch ///////////////
-
- const data = await fetch("https://mindhub-xj03.onrender.com/api/amazing")
-    .then(res => res.json())
-    .catch(err => console.log(err));
-
-const currentDate = data.currentDate;
-
-
-addCardUpcomingDate(data.events , currentDate , true, tarjets)
-
-const filterCheckbox = Array.from(new Set(data.events.map(card => card.category)));
-
-addCheckbox(filterCheckbox,categoryCheckBox);
-
+fetch("https://mindhub-xj03.onrender.com/api/amazing")
+  .then(res => res.json())
+  .then((data) => {
+    
+    const currentDate = data.currentDate;
+    
+    const dataEvents = data.events;
+    
+    addCard(cardFilterUpcoming(dataEvents, currentDate), tarjets)
+    
+    const filterCheckbox = Array.from(new Set ( dataEvents.filter(event => event.date >= currentDate).map(card => card.category)));
+    
+    addCheckbox(filterCheckbox,categoryCheckBox);
+    
+    categoryCheckBox.addEventListener("change", () => {
+      let search = inputSearch[0].value.toLowerCase();
+      let searchFilter = filterSearch(search, cardFilterUpcoming(dataEvents, currentDate) );
+      let filters = categoryFilter(searchFilter);
+      console.log(filters)
+      cardFilterUpcoming(filters, tarjets);
+      printError(filters, tarjets);
+    });
+    
+    inputSearch.addEventListener("keyup", () => {
+      let search = inputSearch[0].value.toLowerCase();
+      let searchFilter = filterSearch(search, cardFilterUpcoming(dataEvents, currentDate));
+      let filters = categoryFilter(searchFilter);
+      cardFilterUpcoming(filters, tarjets);
+      printError(filters, tarjets);
+    });
+    
+    inputSearch.addEventListener("submit" , (e) => {
+      e.preventDefault();
+    })
+  })
+    
 ////// Events ///////////////
 
-categoryCheckBox.addEventListener("change", () => {
-  let search = inputSearch[0].value.toLowerCase();
-  let searchFilter = filterSearch(search, data.events);
-  let filters = categoryFilter(searchFilter);
-  addCardUpcomingDate(filters , currentDate , true, tarjets);
-});
-
-inputSearch.addEventListener("keyup", (e) => {
-  let search = inputSearch[0].value.toLowerCase();
-  let searchFilter = filterSearch(search, data.events);
-  let filters = categoryFilter(searchFilter);
-  addCardUpcomingDate(filters, currentDate , true, tarjets);
-});
-
-inputSearch.addEventListener("submit" , (e) => {
-  e.preventDefault();
-})
