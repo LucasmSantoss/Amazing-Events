@@ -76,7 +76,7 @@
       "image":"cinema.jpg",
       "name": "Avengers",
       "date": "2022-10-15",
-      "description": "Marvel's Avengers 3d premiere the start of an epic saga with your best superheroes",
+      "description": "  ",
       "category": "Let's go to the cinema",
       "place": "Room D1",
       "capacity": 9000,
