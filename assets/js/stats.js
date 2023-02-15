@@ -14,15 +14,13 @@ fetch("https://mindhub-xj03.onrender.com/api/amazing")
         const pastStatistics = pastEventsStatistics(pastEvents);
 
         const eventStatisticsContainer = document.getElementById("event-statistics")
-        eventStatisticsContainer.innerHTML += 
+        eventStatisticsContainer.innerHTML = 
       `<tr>
         <td>"${maxPercentage.name}" with ${((maxPercentage.assistance * 100) / maxPercentage.capacity).toFixed(2)}%</td>
         <td>"${lowPercentage.name}" with ${((lowPercentage.assistance * 100) / lowPercentage.capacity).toFixed(2)}%</td>
         <td>"${maxCap.name}" with ${maxCap.capacity} capacity </td>
       </tr>`
     ;
-
-       
         const upcomingStatisticsContainer = document.getElementById("upcoming-statistics")
         const upcomingRows = upcomingStatistics[0].map((category, i) => 
       `<tr>

@@ -148,16 +148,7 @@ export function filterSearch(search, e) {
   return arrayFilter;
 }
 
-///// STATS ////////////
-
-export function addTable(events, cards) {
-  let boxCards = "";
-  boxCards += table(events);
-  cards.innerHTML = boxCards;
-}
-
-
-
+/////// STATS ////////////
 
 
 
@@ -208,8 +199,8 @@ export function lowAttendance(events) {
 }
 
 export function maxCapacity(events) {
-  let larger = 0
-  let largerCapacityEvent
+  let larger = 0;
+  let largerCapacityEvent;
   for (let event of events) {
       if (larger === 0 || event.capacity > larger) {
           larger = event.capacity
@@ -226,17 +217,17 @@ export function upcomingEventsStatistics(events) {
 
   let upcomingRevenues = [];
   for (let category of upcomingCategories) {
-      let revenueCont = 0
+      let cont = 0;
       for (let event of events) {
           if (event.category === category) {
-              revenueCont += event.estimate * event.price
+            cont += event.estimate * event.price
           }
       }
-      upcomingRevenues.push(revenueCont);
+      upcomingRevenues.push(cont);
   }
 
 
-  let upcomingPercentageOfAttendance = [] 
+  let upcomingAttendance = [];
   for (let category of upcomingCategories) {
       let estimateAttendance = 0;
       let capacity = 0;
@@ -246,11 +237,11 @@ export function upcomingEventsStatistics(events) {
               capacity += event.capacity
           }
       }
-      upcomingPercentageOfAttendance.push((estimateAttendance * 100) / capacity)
+      upcomingAttendance.push((estimateAttendance * 100) / capacity)
   }
 
 
-  upcomingStatistics.push(upcomingCategories, upcomingRevenues, upcomingPercentageOfAttendance)
+  upcomingStatistics.push(upcomingCategories, upcomingRevenues, upcomingAttendance)
   return upcomingStatistics;
 }
 
